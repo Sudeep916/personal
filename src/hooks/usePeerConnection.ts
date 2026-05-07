@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Peer, { DataConnection, MediaConnection } from 'peerjs';
+import { derivePeerId } from '../utils/peerId';
 import { ChatMessage, ConnectionStatus, FriendProfile, Profile, CallState, PeerPayload, ToastItem } from '../types';
 
 const buildMessage = (type: PeerPayload['type'], payload: any): PeerPayload => ({
@@ -50,8 +51,8 @@ export function usePeerConnection(profile: Profile, onToast: (toast: ToastItem) 
       setPeerId(peer.id);
       onToast({
         id: `peer-open-${Date.now()}`,
-        title: 'Peer Ready',
-        message: `Your Peer ID is active. Share it to connect.`,
+        title: 'Connection ready',
+        message: `Your connection handle is active. Share your friend name to connect.`,
         variant: 'success',
       });
     });
@@ -212,10 +213,11 @@ export function usePeerConnection(profile: Profile, onToast: (toast: ToastItem) 
   }, [profile.avatar, profile.name, profile.status]);
 
   const connectToPeer = useCallback(
-    async (remoteId: string) => {
-      if (!peerRef.current) return;
+    async (friendName: string) => {
+      if (!peerRef.current || !friendName.trim()) return;
+      const remoteId = derivePeerId(friendName);
       setConnectionStatus('connecting');
-      setFriendId(remoteId);
+      setFriendId(friendName);
       const connection = peerRef.current.connect(remoteId, { reliable: true });
       connectionRef.current = connection;
 
@@ -225,7 +227,7 @@ export function usePeerConnection(profile: Profile, onToast: (toast: ToastItem) 
         onToast({
           id: `connected-${Date.now()}`,
           title: 'Connected',
-          message: `You are now connected to ${remoteId}.`,
+          message: `You are now connected to ${friendName}.`,
           variant: 'success',
         });
       });

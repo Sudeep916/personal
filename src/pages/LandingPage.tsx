@@ -23,7 +23,7 @@ export default function LandingPage() {
               One-to-one chat, calls, and media — no backend required.
             </h1>
             <p className="max-w-2xl text-slate-300 sm:text-lg">
-              Create your profile, share your Peer ID, and connect instantly with your friend through a secure browser-only WebRTC connection.
+              Create your profile, choose a friend’s display name, and connect instantly through a secure browser-only WebRTC session.
             </p>
           </div>
           <div className="flex flex-col gap-4 sm:flex-row">
@@ -64,13 +64,13 @@ export default function LandingPage() {
                 </div>
               </div>
               <div className="mt-4 rounded-3xl bg-slate-850/90 p-4 text-sm text-slate-300">
-                <p className="font-medium text-slate-100">Your Peer ID</p>
-                <p className="mt-2 truncate text-slate-400">{profile.peerId}</p>
+                <p className="font-medium text-slate-100">Your display name</p>
+                <p className="mt-2 truncate text-slate-400">{profile.name || 'Set your name on setup'}</p>
               </div>
             </div>
             <div className="rounded-3xl border border-white/10 bg-slate-950/95 p-5 shadow-soft">
               <p className="text-sm uppercase tracking-[0.24em] text-slate-400">Connect fast</p>
-              <p className="mt-3 text-slate-300">Share your ID with a friend, enter their ID in the chat screen, and a peer-to-peer session will power your messaging and video call.</p>
+              <p className="mt-3 text-slate-300">Use your friend’s display name in the chat screen to connect through the browser.</p>
               <div className="mt-6 grid gap-3">
                 <div className="rounded-3xl bg-slate-900/80 p-4 text-sm text-slate-200">
                   <p className="font-semibold">No backend</p>

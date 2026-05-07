@@ -10,7 +10,6 @@ import { formatTime } from '../utils/format';
 export default function ChatPage() {
   const { profile, updateProfile, theme, toggleTheme, peerState, toasts } = useAppState();
   const {
-    peerId,
     connectionStatus,
     friendProfile,
     messages,
@@ -119,8 +118,21 @@ export default function ChatPage() {
                 </div>
               </div>
               <div className="rounded-3xl bg-slate-900/80 p-4 text-sm text-slate-300">
-                <p className="font-medium text-slate-100">Your Peer ID</p>
-                <p className="mt-2 break-all text-slate-400">{peerId}</p>
+                <p className="font-medium text-slate-100">Your name</p>
+                <p className="mt-2 break-all text-slate-400">{profile.name || 'Set your profile to start'}</p>
+              </div>
+              <div className="rounded-3xl bg-slate-900/80 p-4 text-sm text-slate-300">
+                <p className="font-medium text-slate-100">Online users</p>
+                <div className="mt-3 space-y-3 text-slate-300">
+                  <div className="rounded-3xl bg-slate-950/80 p-3">
+                    <p className="text-sm font-semibold text-white">{profile.name || 'You'}</p>
+                    <p className="text-xs text-slate-500">This device</p>
+                  </div>
+                  <div className="rounded-3xl bg-slate-950/80 p-3">
+                    <p className="text-sm font-semibold text-white">{friendProfile?.name || 'No friend connected'}</p>
+                    <p className="text-xs text-slate-500">Last known peer</p>
+                  </div>
+                </div>
               </div>
               <div className="space-y-3">
                 <label className="text-sm font-semibold text-slate-200">Connect with a friend</label>
@@ -128,12 +140,13 @@ export default function ChatPage() {
                   <input
                     value={friendId}
                     onChange={(event) => setFriendId(event.target.value)}
-                    placeholder="Friend's Peer ID"
+                    placeholder="Friend's name"
                     className="flex-1 rounded-3xl border border-slate-800 bg-slate-900 px-4 py-3 text-slate-100 outline-none focus:border-sky-400/70"
                   />
                   <button
                     onClick={() => connectToPeer(friendId)}
-                    className="rounded-3xl bg-sky-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-sky-400"
+                    disabled={!friendId.trim()}
+                    className="rounded-3xl bg-sky-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-sky-400 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     Connect
                   </button>
@@ -178,7 +191,7 @@ export default function ChatPage() {
                 <div>
                   <p className="text-xs uppercase tracking-[0.28em] text-sky-300">Messaging room</p>
                   <h2 className="text-xl font-semibold text-white">{friendProfile?.name || 'Waiting for friend'}</h2>
-                  <p className="text-sm text-slate-400">{friendProfile?.status || 'Share your Peer ID to connect.'}</p>
+                  <p className="text-sm text-slate-400">{friendProfile?.status || 'Share your username to connect.'}</p>
                 </div>
               </div>
               <div className="flex gap-2 text-sm text-slate-300 sm:text-base">

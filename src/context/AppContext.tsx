@@ -1,12 +1,13 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import { loadProfile, saveProfile as persistProfile } from '../services/storage';
+import { derivePeerId } from '../utils/peerId';
 import { ThemeMode, Profile, ToastItem } from '../types';
 import { usePeerConnection } from '../hooks/usePeerConnection';
 import { useTheme } from '../hooks/useTheme';
 
 const defaultProfile: Profile = {
   id: crypto.randomUUID(),
-  peerId: `peer-${crypto.randomUUID().slice(0, 8)}`,
+  peerId: derivePeerId(''),
   name: '',
   status: 'Ready to chat',
   avatar: '',
@@ -51,6 +52,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     (patch: Partial<Profile>) => {
       setProfileState((current) => {
         const updated = { ...current, ...patch };
+        if (patch.name !== undefined) {
+          updated.peerId = derivePeerId(patch.name || '');
+        }
         persistProfile(updated);
         return updated;
       });
